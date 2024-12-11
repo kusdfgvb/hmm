@@ -90,6 +90,7 @@ local Input_Roundify_4px = Instance.new("ImageLabel")
 local Windows = Instance.new("Frame")
 
 imgui.Name = "imgui"
+imgui.ResetOnSpawn = false
 imgui.Parent = game:GetService("CoreGui")
 
 Prefabs.Name = "Prefabs"
