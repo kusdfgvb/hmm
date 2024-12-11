@@ -97,7 +97,7 @@ MainTab:AddSwitch("Walk On Water", function(b)
 end)
 
 task.spawn(function()
-	while ui then
+	while ui do
 		task.wait()
 
 		if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
