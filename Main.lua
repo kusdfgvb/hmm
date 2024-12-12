@@ -97,10 +97,18 @@ MainTab:AddSwitch("Walk On Water", function(b)
 	flags.walk_on_water = b
 end)
 
-while ui ~= nil do
-	task.wait()
+local heartbeat = nil
+
+heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
+	if not ui then
+		if heartbeat then
+			heartbeat:Disconnect()
+			heartbeat = nil
+		end
+		return
+	end
+
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
-		print("h > 0")
 		if flags.fast_punch then
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
@@ -151,4 +159,5 @@ while ui ~= nil do
 			end
 		end
 	end
-end
+
+end)
