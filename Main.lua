@@ -95,10 +95,14 @@ MainTab:AddSwitch("Walk On Water", function(b)
 	flags.walk_on_water = b
 end)
 
+MainTab:Show()
+library:FormatWindows()
+
 local heartbeat = nil
 
 heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 	if not game:GetService("CoreGui"):FindFirstChild("imgui") then
+		print("noig")
 		if heartbeat then
 			heartbeat:Disconnect()
 			heartbeat = nil
@@ -107,6 +111,7 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 	end
 
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
+		print("h > 0")
 		if flags.fast_punch then
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
