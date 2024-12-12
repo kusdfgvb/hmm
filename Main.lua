@@ -44,8 +44,6 @@ local Window = library:AddWindow("Supernova", {
 	can_resize = true
 })
 
-local ui = game:GetService("CoreGui"):FindFirstChild("imgui")
-
 local MainTab = Window:AddTab("Main")
 local KillTab = Window:AddTab("Kill")
 
@@ -100,7 +98,7 @@ end)
 local heartbeat = nil
 
 heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
-	if not ui then
+	if not game:GetService("CoreGui"):FindFirstChild("imgui") then
 		if heartbeat then
 			heartbeat:Disconnect()
 			heartbeat = nil
@@ -152,6 +150,8 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 
 				if not punchTool then
 					punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
+				else
+					punchTool.Parent = game.Players.LocalPlayer.Character
 				end
 
 				if punchTool then punchTool:Activate() end
