@@ -99,6 +99,7 @@ end)
 
 while ui ~= nil do
 	task.wait()
+	print("run")
 
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
 		if flags.fast_punch then
