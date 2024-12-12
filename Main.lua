@@ -53,7 +53,8 @@ local flags = {
 	glitch = false,
 	wl = {},
 	kl = {},
-	kill_everyone = false
+	kill_everyone = false,
+	selected_player = nil
 }
 
 
@@ -94,10 +95,107 @@ MainTab:AddSwitch("Walk On Water", function(b)
 	flags.walk_on_water = b
 end)
 
+local antiknock = nil
+local antiidle = nil
+MainTab:AddSwitch("Anti Knock", function(b)
+	if b then
+		antiknock = game:GetService("RunService").Stepped:Connect(function()
+			local char = game.Players.LocalPlayer.Character
+            if char then
+                local HRP = char:FindFirstChild("HumanoidRootPart")
+    
+                if HRP then
+                    local punchVelocity = HRP:FindFirstChild("punchVelocity")
+            
+                    if punchVelocity then
+                        punchVelocity.Velocity = Vector3.new(0, 0, 0)
+                        punchVelocity:Destroy()
+                        HRP.Velocity = Vector3.new(0, 0, 0)
+                    end
+                end
+            end
+		end)
+	else
+		antiknock:Disconnect()
+		antiknock = nil
+	end
+end)
+
+MainTab:AddSwitch("Anti Afk", function(b)
+	if b then
+		antiidle = game.Players.LocalPlayer.Idled:Connect(function()
+			local VU = game:GetService("VirtualUser")
+
+			VU:CaptureController()
+			VU:ClickButton1(Vector2.new())
+		end)
+	else
+		antiidle:Disconnect()
+		antiidle = nil
+	end
+end)
+
+
+local function getPlayerUsernames()
+	local t = {}
+	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+		table.insert(v.Name)
+	end
+
+	return t
+end
+
+local PlayerDropdown = KillTab::AddDropdown("Select Gym", function(obj)
+	flags.selected_player = game:GetService("Players"):FindFirstChild(obj)
+end):Refresh(getPlayerUsernames())
+
+KillTab:AddButton("Spectate", function()
+	if flags.selected_player then
+		local char = flags.selected_player.Character
+		repeat wait(0.5) until char
+		game:GetService("Workspace").CurrentCamera.CameraSubject = char
+	end
+end)
+
+KillTab:AddButton("Stop Spectating", function()
+	game:GetService("Workspace").CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character
+end)
+
+KillTab:AddButton("Wl Player", function()
+	if not flags.selected_player then return end
+	local found = table.find(flags.wl, flags.selected_player.Name)
+	if not found then table.insert(flags.wl, flags.selected_player.Name)
+end)
+
+KillTab:AddButton("Remove Wl", function()
+	if not flags.selected_player then return end
+	table.remove(flags.wl, flags.selected_player.Name)
+end)
+
+KillTab:AddButton("Kill Player", function()
+	if not flags.selected_player then return end
+	local isWl = table.find(flags.wl, flags.selected_player.Name)
+	if isWl then return end
+	local found = table.find(flags.kl, flags.selected_player.Name)
+	if not found then table.insert(flags.kl, flags.selected_player.Name)
+end)
+
+KillTab:AddButton("Stop Killing Player", function()
+	if not flags.selected_player then return end
+	table.remove(flags.kl, flags.selected_player.Name)
+end)
+
+KillTab:AddSwitch("Kill everyone", function(b)
+	flags.kill_everyone = b
+end)
+
+
 MainTab:Show()
 library:FormatWindows()
 
 local heartbeat = nil
+
+local startTime = tick()
 
 heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 	if not game:GetService("CoreGui"):FindFirstChild("imgui") then
@@ -165,6 +263,37 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 
 			if punchTool then punchTool:Activate() end
 
+		else
+			rock.CFrame = CFrame.new(Vector3.new(999, 999, 999))
+		end
+
+		if tick() - startTime < 0.2 then return end
+		startTime = tick()
+		local muscleEvent = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
+
+		if flags.kill_everyone then
+			local lefthand = game.Players.LocalPlayer.Character.LeftHand
+			for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+				if v ~= game.Players.LocalPlayer and not table.find(flags.wl, v.Name) then
+					local pChar = v.Character
+					if pChar then pChar.Head.CFrame = lefthand.CFrame end
+					muscleEvent:FireServer("punch", "leftHand")
+					muscleEvent:FireServer("punch", "rightHand")
+				end
+			end
+		end
+
+		if #flags.kl > 0 then
+			local lefthand = game.Players.LocalPlayer.Character.LeftHand
+			for _, v in pairs(flags.kl) do
+				if table.find(flags.wl, v) then
+					local player = game.Players:FindFirstChild(v)
+					local pChar = player and player.Character
+					if pChar then pChar.Head.CFrame = lefthand.CFrame end
+					muscleEvent:FireServer("punch", "leftHand")
+					muscleEvent:FireServer("punch", "rightHand")
+				end
+			end
 		end
 	end
 end)
