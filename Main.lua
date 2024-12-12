@@ -99,9 +99,8 @@ end)
 
 while ui ~= nil do
 	task.wait()
-	print("run")
-
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
+		print("h > 0")
 		if flags.fast_punch then
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
