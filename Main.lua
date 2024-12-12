@@ -145,7 +145,7 @@ local function getPlayerUsernames()
 	return t
 end
 
-local PlayerDropdown = KillTab::AddDropdown("Select Gym", function(obj)
+local PlayerDropdown = KillTab:AddDropdown("Select Gym", function(obj)
 	flags.selected_player = game:GetService("Players"):FindFirstChild(obj)
 end):Refresh(getPlayerUsernames())
 
