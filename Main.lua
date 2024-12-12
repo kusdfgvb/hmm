@@ -97,63 +97,58 @@ MainTab:AddSwitch("Walk On Water", function(b)
 	flags.walk_on_water = b
 end)
 
-task.spawn(function()
-	while ui do
-		task.wait()
+while ui ~= nil do
+	task.wait()
 
-		if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
-			if flags.fast_punch then
+	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
+		if flags.fast_punch then
+			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
+
+			if not punchTool then
+				punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
+			end
+
+			if punchTool then punchTool.attackTime.Value = 0 end
+
+			if flags.walk_on_water then
+				local platform = game:GetService("Workspace"):FindFirstChild("wow")
+				if not platform then
+					platform = Instance.new("Part")
+					platform.Name = "wow"
+					platform.Anchored = true
+					platform.Size = Vector3.new(10000, 0, 10000)
+					platform.Position = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X, -8.8, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)
+					platform.Transparency = 1
+					platform.Parent = game:GetService("Workspace")
+				end
+
+				if game.Players.LocalPlayer.Character then
+					platform.Position = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X, -8.8, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)
+				end
+			else
+				local platform = game:GetService("Workspace"):FindFirstChild("wow")
+				if platform then platform:Destroy() end
+			end
+
+			if flags.glitch then
+				local rock = workspace.machinesFolder:FindFirstChild("Muscle King Mountain").Rock
+				rock.CanCollide = false
+
+				local gui = rock:FindFirstChild("rockGui")
+				local particle = rock:FindFirstChild("hoopParticle")
+
+				if gui then gui:Destroy() end
+				if particle then particle.Enabled = false end
+
 				local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
 				if not punchTool then
 					punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
 				end
 
-				if punchTool then punchTool.attackTime.Value = 0
-				end
+				if punchTool then punchTool:Activate() end
 
-				if flags.walk_on_water then
-					local platform = game:GetService("Workspace"):FindFirstChild("wow")
-					if not platform then
-						platform = Instance.new("Part")
-						platform.Name = "wow"
-						platform.Anchored = true
-						platform.Size = Vector3.new(10000, 0, 10000)
-						platform.Position = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X, -8.8, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)
-						platform.Transparency = 1
-						platform.Parent = game:GetService("Workspace")
-					end
-
-					if game.Players.LocalPlayer.Character then
-						platform.Position = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.Position.X, -8.8, game.Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)
-					end
-				else
-					local platform = game:GetService("Workspace"):FindFirstChild("wow")
-					if platform then platform:Destroy() end
-				end
-
-				if flags.glitch then
-					local rock = workspace.machinesFolder:FindFirstChild("Muscle King Mountain").Rock
-					rock.CanCollide = false
-
-					local gui = rock:FindFirstChild("rockGui")
-					local particle = rock:FindFirstChild("hoopParticle")
-
-					if gui then gui:Destroy() end
-					if particle then particle.Enabled = false end
-
-					local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
-
-					if not punchTool then
-						punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
-					end
-
-					if punchTool then punchTool:Activate() end
-
-				end
 			end
-
-
 		end
 	end
-end)
+end
