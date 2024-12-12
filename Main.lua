@@ -142,6 +142,9 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 
 		if flags.glitch then
 			local rock = workspace.machinesFolder:FindFirstChild("Muscle King Mountain").Rock
+			local lefthand = game.Players.LocalPlayer.Character.LeftHand
+
+			rock.Size = Vector3.new(0.1, 0.1, 0.1)
 			rock.CanCollide = false
 
 			local gui = rock:FindFirstChild("rockGui")
@@ -151,6 +154,8 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			if particle then particle.Enabled = false end
 
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
+
+			rock.CFrame = lefthand.CFrame
 
 			if not punchTool then
 				punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
