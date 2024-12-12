@@ -106,7 +106,7 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 		return
 	end
 
-	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
+	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
 		if flags.fast_punch then
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
