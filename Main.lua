@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics V1", {
+local Window = library:AddWindow("Cybernetics atk", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -354,6 +354,7 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			startTime = tick()
 
 			if flags.kill_everyone then
+				print("aiming to kill")
 				kill_everyone()
 			end
 
