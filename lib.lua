@@ -1,9 +1,3 @@
---[[
-	ui-engine-v2
-	version 1.3a
-	by Singularity (V3rm @ King Singularity) (Discord @ Singularity#5490)
---]]
-
 local ui_options = {
 	main_color = Color3.fromRGB(41, 74, 122),
 	min_size = Vector2.new(400, 300),
@@ -12,11 +6,15 @@ local ui_options = {
 }
 
 do
-	local imgui = game:GetService("CoreGui"):FindFirstChild("imgui")
-	if imgui then imgui:Destroy() end
+	local imgui = game:GetService("CoreGui"):FindFirstChild("Nitrous")
+	if imgui then
+		imgui:Destroy()
+		task.wait(1)
+	end
 end
 
 local imgui = Instance.new("ScreenGui")
+imgui.ResetOnSpawn = false
 local Prefabs = Instance.new("Frame")
 local Label = Instance.new("TextLabel")
 local Window = Instance.new("ImageLabel")
@@ -89,8 +87,7 @@ local Input = Instance.new("TextButton")
 local Input_Roundify_4px = Instance.new("ImageLabel")
 local Windows = Instance.new("Frame")
 
-imgui.Name = "imgui"
-imgui.ResetOnSpawn = false
+imgui.Name = "Nitrous"
 imgui.Parent = game:GetService("CoreGui")
 
 Prefabs.Name = "Prefabs"
@@ -809,7 +806,6 @@ Windows.BackgroundTransparency = 1
 Windows.Position = UDim2.new(0, 20, 0, 20)
 Windows.Size = UDim2.new(1, 20, 1, -20)
 
---[[ Script ]]--
 script.Parent = imgui
 
 local UIS = game:GetService("UserInputService")
@@ -844,7 +840,7 @@ local function Resize(part, new, _delay)
 	tween:Play()
 end
 
-local function rgbtohsv(r, g, b) -- idk who made this function, but thanks
+local function rgbtohsv(r, g, b)
 	r, g, b = r / 255, g / 255, b / 255
 	local max, min = math.max(r, g, b), math.min(r, g, b)
 	local h, s, v
@@ -908,9 +904,9 @@ local function ripple(button, x, y)
 
 		local size = 0
 		if button.AbsoluteSize.X > button.AbsoluteSize.Y then
-			 size = button.AbsoluteSize.X * 1.5
+			size = button.AbsoluteSize.X * 1.5
 		elseif button.AbsoluteSize.X < button.AbsoluteSize.Y then
-			 size = button.AbsoluteSize.Y * 1.5
+			size = button.AbsoluteSize.Y * 1.5
 		elseif button.AbsoluteSize.X == button.AbsoluteSize.Y then
 			size = button.AbsoluteSize.X * 1.5
 		end
@@ -961,7 +957,7 @@ function library:AddWindow(title, options)
 	Window.Size = UDim2.new(0, options.min_size.X, 0, options.min_size.Y)
 	Window.ZIndex = Window.ZIndex + (windows * 10)
 
-	do -- Altering Window Color
+	do
 		local Title = Window:FindFirstChild("Title")
 		local Bar = Window:FindFirstChild("Bar")
 		local Base = Bar:FindFirstChild("Base")
@@ -988,14 +984,13 @@ function library:AddWindow(title, options)
 	local window_data = {}
 	Window.Draggable = true
 
-	do -- Resize Window
+	do
 		local oldIcon = mouse.Icon
 		local Entered = false
 		Resizer.MouseEnter:Connect(function()
 			Window.Draggable = false
 			if options.can_resize then
 				oldIcon = mouse.Icon
-				-- mouse.Icon = "http://www.roblox.com/asset?id=4745131330"
 			end
 			Entered = true
 		end)
@@ -1013,7 +1008,7 @@ function library:AddWindow(title, options)
 			if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 				Held = true
 
-				spawn(function() -- Loop check
+				spawn(function()
 					if Entered and Resizer.Active and options.can_resize then
 						while Held and Resizer.Active do
 
@@ -1021,7 +1016,7 @@ function library:AddWindow(title, options)
 							local x = mouse_location.X - Window.AbsolutePosition.X
 							local y = mouse_location.Y - Window.AbsolutePosition.Y
 
-							--
+
 							if x >= options.min_size.X and y >= options.min_size.Y then
 								Resize(Window, {Size = UDim2.new(0, x, 0, y)}, options.tween_time)
 							elseif x >= options.min_size.X then
@@ -1045,7 +1040,7 @@ function library:AddWindow(title, options)
 		end)
 	end
 
-	do -- [Open / Close] Window
+	do
 		local open_close = Window:FindFirstChild("Bar"):FindFirstChild("Toggle")
 		local open = true
 		local canopen = true
@@ -1057,7 +1052,6 @@ function library:AddWindow(title, options)
 				canopen = false
 
 				if open then
-					-- Close
 
 					oldwindowdata = {}
 					for i,v in next, Window:FindFirstChild("Tabs"):GetChildren() do
@@ -1073,8 +1067,6 @@ function library:AddWindow(title, options)
 					open_close.Parent:FindFirstChild("Base").Transparency = 1
 
 				else
-					-- Open
-
 					for i,v in next, oldwindowdata do
 						i.Visible = v
 					end
@@ -1095,12 +1087,12 @@ function library:AddWindow(title, options)
 		end)
 	end
 
-	do -- UI Elements
+	do
 		local tabs = Window:FindFirstChild("Tabs")
 		local tab_selection = Window:FindFirstChild("TabSelection")
 		local tab_buttons = tab_selection:FindFirstChild("TabButtons")
 
-		do -- Add Tab
+		do
 			function window_data:AddTab(tab_name)
 				local tab_data = {}
 				tab_name = tostring(tab_name or "New Tab")
@@ -1142,9 +1134,9 @@ function library:AddWindow(title, options)
 					show()
 				end
 
-				do -- Tab Elements
+				do
 
-					function tab_data:AddLabel(label_text) -- [Label]
+					function tab_data:AddLabel(label_text)
 						label_text = tostring(label_text or "New Label")
 
 						local label = Prefabs:FindFirstChild("Label"):Clone()
@@ -1157,7 +1149,7 @@ function library:AddWindow(title, options)
 						return label
 					end
 
-					function tab_data:AddButton(button_text, callback) -- [Button]
+					function tab_data:AddButton(button_text, callback)
 						button_text = tostring(button_text or "New Button")
 						callback = typeof(callback) == "function" and callback or function()end
 
@@ -1186,7 +1178,7 @@ function library:AddWindow(title, options)
 						return button
 					end
 
-					function tab_data:AddSwitch(switch_text, callback) -- [Switch]
+					function tab_data:AddSwitch(switch_text, callback)
 						local switch_data = {}
 
 						switch_text = tostring(switch_text or "New Switch")
@@ -1281,7 +1273,7 @@ function library:AddWindow(title, options)
 
 						title.Text = slider_text
 
-						do -- Slider Math
+						do
 							local Entered = false
 							slider.MouseEnter:Connect(function()
 								Entered = true
@@ -1297,7 +1289,7 @@ function library:AddWindow(title, options)
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Held = true
 
-									spawn(function() -- Loop check
+									spawn(function()
 										if Entered and not slider_options.readonly then
 											while Held and (not dropdown_open) do
 												local mouse_location = gMouse()
@@ -1384,14 +1376,14 @@ function library:AddWindow(title, options)
 						title.Text = "  " .. keybind_name
 						keybind.Size = UDim2.new(0, gNameLen(title) + 80, 0, 20)
 
-						local shortkeys = { -- thanks to stroketon for helping me out with this
-				            RightControl = 'RightCtrl',
-				            LeftControl = 'LeftCtrl',
-				            LeftShift = 'LShift',
-				            RightShift = 'RShift',
-				            MouseButton1 = "Mouse1",
-				            MouseButton2 = "Mouse2"
-				        }
+						local shortkeys = {
+							RightControl = 'RightCtrl',
+							LeftControl = 'LeftCtrl',
+							LeftShift = 'LShift',
+							RightShift = 'RShift',
+							MouseButton1 = "Mouse1",
+							MouseButton2 = "Mouse2"
+						}
 
 						local keybind = keybind_options.standard
 
@@ -1456,12 +1448,12 @@ function library:AddWindow(title, options)
 								objects.CanvasSize = UDim2.new(0, 0, (#objects:GetChildren() - 1) * 0.1, 0)
 							end
 
-							if open then -- Open
+							if open then
 								if dropdown_open then return end
 								dropdown_open = true
 								Resize(box, {Size = UDim2.new(1, 0, 0, len)}, options.tween_time)
 								Resize(indicator, {Rotation = 90}, options.tween_time)
-							else -- Close
+							else
 								dropdown_open = false
 								Resize(box, {Size = UDim2.new(1, 0, 0, 0)}, options.tween_time)
 								Resize(indicator, {Rotation = -90}, options.tween_time)
@@ -1513,6 +1505,22 @@ function library:AddWindow(title, options)
 							return object, object_data
 						end
 
+						function dropdown_data:Refresh(new_data)
+							for _, child in pairs(objects:GetChildren()) do
+								if child:IsA("GuiObject") then
+									child:Destroy()
+								end
+							end
+
+							if open then
+								Resize(box, {Size = UDim2.new(1, 0, 0, 0)}, options.tween_time)
+							end
+
+							for _, new_item in ipairs(new_data) do
+								dropdown_data:Add(new_item)
+							end
+						end
+
 						return dropdown_data, dropdown
 					end
 
@@ -1532,7 +1540,7 @@ function library:AddWindow(title, options)
 						sample.ZIndex = sample.ZIndex + (windows * 10)
 						saturation.ZIndex = saturation.ZIndex + (windows * 10)
 
-						do -- Color Picker Math
+						do
 							local h = 0
 							local s = 1
 							local v = 1
@@ -1578,8 +1586,8 @@ function library:AddWindow(title, options)
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Held = true
 
-									spawn(function() -- Loop check
-										while Held and Entered1 and (not dropdown_open) do -- Palette
+									spawn(function()
+										while Held and Entered1 and (not dropdown_open) do
 											local mouse_location = gMouse()
 
 											local x = ((palette.AbsoluteSize.X - (mouse_location.X - palette.AbsolutePosition.X)) + 1)
@@ -1595,7 +1603,7 @@ function library:AddWindow(title, options)
 											RS.Heartbeat:Wait()
 										end
 
-										while Held and Entered2 and (not dropdown_open) do -- Saturation
+										while Held and Entered2 and (not dropdown_open) do
 											local mouse_location = gMouse()
 											local y = ((palette.AbsoluteSize.Y - (mouse_location.Y - palette.AbsolutePosition.Y)) + 1.5)
 											v = y / 100
@@ -1651,185 +1659,185 @@ function library:AddWindow(title, options)
 
 						Source.TextEditable = not console_options.readonly
 
-						do -- Syntax Zindex
+						do
 							for i,v in next, Source:GetChildren() do
 								v.ZIndex = v.ZIndex + (windows * 10) + 1
 							end
 						end
 						Source.Comments.ZIndex = Source.Comments.ZIndex + 1
 
-						do -- Highlighting (thanks to whoever made this)
+						do
 							local lua_keywords = {"and", "break", "do", "else", "elseif", "end", "false", "for", "function", "goto", "if", "in", "local", "nil", "not", "or", "repeat", "return", "then", "true", "until", "while"}
 							local global_env = {"getrawmetatable", "newcclosure", "islclosure", "setclipboard", "game", "workspace", "script", "math", "string", "table", "print", "wait", "BrickColor", "Color3", "next", "pairs", "ipairs", "select", "unpack", "Instance", "Vector2", "Vector3", "CFrame", "Ray", "UDim2", "Enum", "assert", "error", "warn", "tick", "loadstring", "_G", "shared", "getfenv", "setfenv", "newproxy", "setmetatable", "getmetatable", "os", "debug", "pcall", "ypcall", "xpcall", "rawequal", "rawset", "rawget", "tonumber", "tostring", "type", "typeof", "_VERSION", "coroutine", "delay", "require", "spawn", "LoadLibrary", "settings", "stats", "time", "UserSettings", "version", "Axes", "ColorSequence", "Faces", "ColorSequenceKeypoint", "NumberRange", "NumberSequence", "NumberSequenceKeypoint", "gcinfo", "elapsedTime", "collectgarbage", "PhysicalProperties", "Rect", "Region3", "Region3int16", "UDim", "Vector2int16", "Vector3int16", "load", "fire", "Fire"}
 
 							local Highlight = function(string, keywords)
-							    local K = {}
-							    local S = string
-							    local Token =
-							    {
-							        ["="] = true,
-							        ["."] = true,
-							        [","] = true,
-							        ["("] = true,
-							        [")"] = true,
-							        ["["] = true,
-							        ["]"] = true,
-							        ["{"] = true,
-							        ["}"] = true,
-							        [":"] = true,
-							        ["*"] = true,
-							        ["/"] = true,
-							        ["+"] = true,
-							        ["-"] = true,
-							        ["%"] = true,
-									[";"] = true,
-									["~"] = true
-							    }
-							    for i, v in pairs(keywords) do
-							        K[v] = true
-							    end
-							    S = S:gsub(".", function(c)
-							        if Token[c] ~= nil then
-							            return "\32"
-							        else
-							            return c
-							        end
-							    end)
-							    S = S:gsub("%S+", function(c)
-							        if K[c] ~= nil then
-							            return c
-							        else
-							            return (" "):rep(#c)
-							        end
-							    end)
+								local K = {}
+								local S = string
+								local Token =
+									{
+										["="] = true,
+										["."] = true,
+										[","] = true,
+										["("] = true,
+										[")"] = true,
+										["["] = true,
+										["]"] = true,
+										["{"] = true,
+										["}"] = true,
+										[":"] = true,
+										["*"] = true,
+										["/"] = true,
+										["+"] = true,
+										["-"] = true,
+										["%"] = true,
+										[";"] = true,
+										["~"] = true
+									}
+								for i, v in pairs(keywords) do
+									K[v] = true
+								end
+								S = S:gsub(".", function(c)
+									if Token[c] ~= nil then
+										return "\32"
+									else
+										return c
+									end
+								end)
+								S = S:gsub("%S+", function(c)
+									if K[c] ~= nil then
+										return c
+									else
+										return (" "):rep(#c)
+									end
+								end)
 
-							    return S
+								return S
 							end
 
 							local hTokens = function(string)
-							    local Token =
-							    {
-							        ["="] = true,
-							        ["."] = true,
-							        [","] = true,
-							        ["("] = true,
-							        [")"] = true,
-							        ["["] = true,
-							        ["]"] = true,
-							        ["{"] = true,
-							        ["}"] = true,
-							        [":"] = true,
-							        ["*"] = true,
-							        ["/"] = true,
-							        ["+"] = true,
-							        ["-"] = true,
-							        ["%"] = true,
-									[";"] = true,
-									["~"] = true
-							    }
-							    local A = ""
-							    string:gsub(".", function(c)
-							        if Token[c] ~= nil then
-							            A = A .. c
-							        elseif c == "\n" then
-							            A = A .. "\n"
+								local Token =
+									{
+										["="] = true,
+										["."] = true,
+										[","] = true,
+										["("] = true,
+										[")"] = true,
+										["["] = true,
+										["]"] = true,
+										["{"] = true,
+										["}"] = true,
+										[":"] = true,
+										["*"] = true,
+										["/"] = true,
+										["+"] = true,
+										["-"] = true,
+										["%"] = true,
+										[";"] = true,
+										["~"] = true
+									}
+								local A = ""
+								string:gsub(".", function(c)
+									if Token[c] ~= nil then
+										A = A .. c
+									elseif c == "\n" then
+										A = A .. "\n"
 									elseif c == "\t" then
 										A = A .. "\t"
-							        else
-							            A = A .. "\32"
-							        end
-							    end)
+									else
+										A = A .. "\32"
+									end
+								end)
 
-							    return A
+								return A
 							end
 
 							local strings = function(string)
-							    local highlight = ""
-							    local quote = false
-							    string:gsub(".", function(c)
-							        if quote == false and c == "\34" then
-							            quote = true
-							        elseif quote == true and c == "\34" then
-							            quote = false
-							        end
-							        if quote == false and c == "\34" then
-							            highlight = highlight .. "\34"
-							        elseif c == "\n" then
-							            highlight = highlight .. "\n"
+								local highlight = ""
+								local quote = false
+								string:gsub(".", function(c)
+									if quote == false and c == "\34" then
+										quote = true
+									elseif quote == true and c == "\34" then
+										quote = false
+									end
+									if quote == false and c == "\34" then
+										highlight = highlight .. "\34"
+									elseif c == "\n" then
+										highlight = highlight .. "\n"
 									elseif c == "\t" then
-									    highlight = highlight .. "\t"
-							        elseif quote == true then
-							            highlight = highlight .. c
-							        elseif quote == false then
-							            highlight = highlight .. "\32"
-							        end
-							    end)
+										highlight = highlight .. "\t"
+									elseif quote == true then
+										highlight = highlight .. c
+									elseif quote == false then
+										highlight = highlight .. "\32"
+									end
+								end)
 
-							    return highlight
+								return highlight
 							end
 
 							local info = function(string)
-							    local highlight = ""
-							    local quote = false
-							    string:gsub(".", function(c)
-							        if quote == false and c == "[" then
-							            quote = true
-							        elseif quote == true and c == "]" then
-							            quote = false
-							        end
-							        if quote == false and c == "\]" then
-							            highlight = highlight .. "\]"
-							        elseif c == "\n" then
-							            highlight = highlight .. "\n"
+								local highlight = ""
+								local quote = false
+								string:gsub(".", function(c)
+									if quote == false and c == "[" then
+										quote = true
+									elseif quote == true and c == "]" then
+										quote = false
+									end
+									if quote == false and c == "\]" then
+										highlight = highlight .. "\]"
+									elseif c == "\n" then
+										highlight = highlight .. "\n"
 									elseif c == "\t" then
-									    highlight = highlight .. "\t"
-							        elseif quote == true then
-							            highlight = highlight .. c
-							        elseif quote == false then
-							            highlight = highlight .. "\32"
-							        end
-							    end)
+										highlight = highlight .. "\t"
+									elseif quote == true then
+										highlight = highlight .. c
+									elseif quote == false then
+										highlight = highlight .. "\32"
+									end
+								end)
 
-							    return highlight
+								return highlight
 							end
 
 							local comments = function(string)
-							    local ret = ""
-							    string:gsub("[^\r\n]+", function(c)
-							        local comm = false
-							        local i = 0
-							        c:gsub(".", function(n)
-							            i = i + 1
-							            if c:sub(i, i + 1) == "--" then
-							                comm = true
-							            end
-							            if comm == true then
-							                ret = ret .. n
-							            else
-							                ret = ret .. "\32"
-							            end
-							        end)
-							        ret = ret
-							    end)
+								local ret = ""
+								string:gsub("[^\r\n]+", function(c)
+									local comm = false
+									local i = 0
+									c:gsub(".", function(n)
+										i = i + 1
+										if c:sub(i, i + 1) == "--" then
+											comm = true
+										end
+										if comm == true then
+											ret = ret .. n
+										else
+											ret = ret .. "\32"
+										end
+									end)
+									ret = ret
+								end)
 
-							    return ret
+								return ret
 							end
 
 							local numbers = function(string)
-							    local A = ""
-							    string:gsub(".", function(c)
-							        if tonumber(c) ~= nil then
-							            A = A .. c
-							        elseif c == "\n" then
-							            A = A .. "\n"
+								local A = ""
+								string:gsub(".", function(c)
+									if tonumber(c) ~= nil then
+										A = A .. c
+									elseif c == "\n" then
+										A = A .. "\n"
 									elseif c == "\t" then
 										A = A .. "\t"
-							        else
-							            A = A .. "\32"
-							        end
-							    end)
+									else
+										A = A .. "\32"
+									end
+								end)
 
-							    return A
+								return A
 							end
 
 							local highlight_lua = function(type)
@@ -1859,8 +1867,8 @@ function library:AddWindow(title, options)
 									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
 								end
 
-							local highlight_logs = function(type)
-							end
+								local highlight_logs = function(type)
+								end
 								if type == "Text" then
 									Source.Text = Source.Text:gsub("\13", "")
 									Source.Text = Source.Text:gsub("\t", "      ")
@@ -1925,10 +1933,23 @@ function library:AddWindow(title, options)
 							end
 						end
 
+						function ha_data:AddLabel(label_text)
+							label_text = tostring(label_text or "New Label")
+	
+							local label = Prefabs:FindFirstChild("Label"):Clone()
+	
+							label.Parent = ha
+							label.Text = label_text
+							label.Size = UDim2.new(0, gNameLen(label), 0, 20)
+							label.ZIndex = label.ZIndex + (windows * 10)
+	
+							return label
+						end
+
 						return ha_data, ha
 					end
 
-					function tab_data:AddFolder(folder_name) -- [Folder]
+					function tab_data:AddFolder(folder_name)
 						local folder_data = {}
 
 						folder_name = tostring(folder_name or "New Folder")
@@ -1967,10 +1988,10 @@ function library:AddWindow(title, options)
 
 						local open = false
 						button.MouseButton1Click:Connect(function()
-							if open then -- Close
+							if open then
 								Resize(toggle, {Rotation = 0}, options.tween_time)
 								objects.Visible = false
-							else -- Open
+							else
 								Resize(toggle, {Rotation = 90}, options.tween_time)
 								objects.Visible = true
 							end
