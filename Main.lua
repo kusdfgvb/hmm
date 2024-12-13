@@ -101,19 +101,19 @@ MainTab:AddSwitch("Anti Knock", function(b)
 	if b then
 		antiknock = game:GetService("RunService").Stepped:Connect(function()
 			local char = game.Players.LocalPlayer.Character
-            if char then
-                local HRP = char:FindFirstChild("HumanoidRootPart")
-    
-                if HRP then
-                    local punchVelocity = HRP:FindFirstChild("punchVelocity")
-            
-                    if punchVelocity then
-                        punchVelocity.Velocity = Vector3.new(0, 0, 0)
-                        punchVelocity:Destroy()
-                        HRP.Velocity = Vector3.new(0, 0, 0)
-                    end
-                end
-            end
+			if char then
+				local HRP = char:FindFirstChild("HumanoidRootPart")
+
+				if HRP then
+					local punchVelocity = HRP:FindFirstChild("punchVelocity")
+
+					if punchVelocity then
+						punchVelocity.Velocity = Vector3.new(0, 0, 0)
+						punchVelocity:Destroy()
+						HRP.Velocity = Vector3.new(0, 0, 0)
+					end
+				end
+			end
 		end)
 	else
 		antiknock:Disconnect()
@@ -164,7 +164,7 @@ end)
 KillTab:AddButton("Wl Player", function()
 	if not flags.selected_player then return end
 	local found = table.find(flags.wl, flags.selected_player.Name)
-	if not found then table.insert(flags.wl, flags.selected_player.Name)
+	if not found then table.insert(flags.wl, flags.selected_player.Name) end
 end)
 
 KillTab:AddButton("Remove Wl", function()
@@ -177,7 +177,7 @@ KillTab:AddButton("Kill Player", function()
 	local isWl = table.find(flags.wl, flags.selected_player.Name)
 	if isWl then return end
 	local found = table.find(flags.kl, flags.selected_player.Name)
-	if not found then table.insert(flags.kl, flags.selected_player.Name)
+	if not found then table.insert(flags.kl, flags.selected_player.Name) end
 end)
 
 KillTab:AddButton("Stop Killing Player", function()
@@ -264,7 +264,8 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			if punchTool then punchTool:Activate() end
 
 		else
-			rock.CFrame = CFrame.new(Vector3.new(999, 999, 999))
+			local rock = workspace.machinesFolder:FindFirstChild("Muscle King Mountain").Rock
+			if rock then rock.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999)) end
 		end
 
 		if tick() - startTime < 0.2 then return end
