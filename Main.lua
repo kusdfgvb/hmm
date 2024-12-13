@@ -195,6 +195,74 @@ KillTab:AddSwitch("Kill everyone", function(b)
 	flags.kill_everyone = b
 end)
 
+local function kill_everyone()
+
+	local muscle_event = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
+	local self_char = game.Players.LocalPlayer.Character
+	if not self_char then return end
+
+	local left_hand = self_char.LeftHand
+	local right_hand = self_char.RightHand
+
+	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+		if v ~= game.Players.LocalPlayer and v.Name ~= "Forgiveness19" and v.Name ~= "Wraith1286" then
+			if not table.find(flags.wl, v.Name) then
+				local player_char = v.Character
+				if player_char and player_char:FindFirstChild("Humanoid") and player_char.Humanoid.Health > 0 then
+					local head = player_char:FindFirstChild("Head")
+					if head then
+						local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
+						if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
+						head.Anchored = true
+						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
+						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
+						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+						head.Anchored = false
+						head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
+					end
+				end
+			end
+		end
+	end
+
+
+end
+
+local function kill_players(t)
+	if #t < 1 then return end
+
+	local muscle_event = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
+	local self_char = game.Players.LocalPlayer.Character
+	if not self_char then return end
+
+	local left_hand = self_char.LeftHand
+	local right_hand = self_char.RightHand
+
+	for _, v in ipairs(t) do
+		if t ~= game.Players.LocalPlayer.Name and t ~= "Forgiveness19" and t ~= "Wraith1286" then
+
+			local player = game:GetService("Players"):FindFirstChild(v)
+
+			if player and player.Character then
+				local player_char = player.Character
+				local head = player_char:FindFirstChild("Head")
+				if head then
+					local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
+					if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
+					head.Anchored = true
+					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
+					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
+					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+					head.Anchored = false
+					head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
+				end
+			end
+		end
+	end
+end
+
 
 MainTab:Show()
 library:FormatWindows()
@@ -284,60 +352,10 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			local muscleEvent = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
 
 			if flags.kill_everyone then
-				local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
-				if not punchTool then
-					punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
-				else
-					punchTool.Parent = game.Players.LocalPlayer.Character
-				end
-
-	    		local lefthand = game.Players.LocalPlayer.Character.LeftHand
-    			for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-        			if v ~= game.Players.LocalPlayer and not table.find(flags.wl, v.Name) then
-            			local pChar = v.Character
-            			if pChar then
-                			local head = pChar:FindFirstChild("Head")
-                			if head then
-								head.Anchored = true
-								pChar.Humanoid.PlatformStand = true
-								head.CFrame = lefthand.CFrame
-								muscleEvent:FireServer("punch", "leftHand")
-    	    		        	muscleEvent:FireServer("punch", "rightHand")
-								head.Anchored = false
-							end
-			            end
-        			end
-	    		end
+				kill_everyone()
 			end
 
-			if #flags.kl > 0 then
-				local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
-				if not punchTool then
-					punchTool = game.Players.LocalPlayer.Character:FindFirstChild("Punch")
-				else
-					punchTool.Parent = game.Players.LocalPlayer.Character
-				end
-    			local lefthand = game.Players.LocalPlayer.Character.LeftHand
-	   			for _, v in pairs(flags.kl) do
-    	    		if not table.find(flags.wl, v) then
-        	    		local player = game.Players:FindFirstChild(v)
-            			if player then
-                			local pChar = player.Character
-                			if pChar then
-								local head = pChar:FindFirstChild("Head")
-								if head then
-									head.Anchored = true
-									pChar.Humanoid.PlatformStand = true
-									head.CFrame = lefthand.CFrame
-									muscleEvent:FireServer("punch", "leftHand")
-									muscleEvent:FireServer("punch", "rightHand")
-									head.Anchored = false
-								end
-							end
-		        	    end
-			        end
-			    end
-			end
+			kill_players(flags.kl)
 		end
 	end
 end)
