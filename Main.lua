@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics 1", {
+local Window = library:AddWindow("Cybernetics 13", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -213,13 +213,15 @@ local function kill_everyone()
 					if head then
 						local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 						if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
+						humanoid.PlatformStand = true
 						head.Anchored = true
+						head.CFrame = left_hand.CFrame
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
-						head.Anchored = false
 						head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
+						head.Anchored = false
 					end
 				end
 			end
@@ -250,13 +252,15 @@ local function kill_players(t)
 				if head then
 					local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 					if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
+					humanoid.PlatformStand = true
 					head.Anchored = true
+					head.CFrame = left_hand.CFrame
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
-					head.Anchored = false
 					head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
+					head.Anchored = false
 				end
 			end
 		end
