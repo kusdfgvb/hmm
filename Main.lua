@@ -213,7 +213,7 @@ local function kill_everyone()
 					if head then
 						local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 						if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
-						humanoid.PlatformStand = true
+						player_char:FindFirstChild("Humanoid").PlatformStand = true
 						head.Anchored = true
 						head.CFrame = left_hand.CFrame
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
@@ -252,7 +252,7 @@ local function kill_players(t)
 				if head then
 					local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 					if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
-					humanoid.PlatformStand = true
+					player_char:FindFirstChild("Humanoid").PlatformStand = true
 					head.Anchored = true
 					head.CFrame = left_hand.CFrame
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
