@@ -220,6 +220,9 @@ local function kill_everyone()
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+						task.wait(0.03)
+						head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
+						head.Anchored = false
 					end
 				end
 			end
@@ -256,6 +259,7 @@ local function kill_players(t)
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 					muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
+					task.wait(0.03)
 					head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
 					head.Anchored = false
 				end
