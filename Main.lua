@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics atk", {
+local Window = library:AddWindow("Cybernetics ad", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -205,7 +205,7 @@ local function kill_everyone()
 	local right_hand = self_char.RightHand
 
 	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-		if v ~= game.Players.LocalPlayer and v.Name ~= "Forgiveness19" and v.Name ~= "Wraith1286" then
+		if v ~= game.Players.LocalPlayer then
 			if not table.find(flags.wl, v.Name) then
 				local player_char = v.Character
 				if player_char and player_char:FindFirstChild("Humanoid") and player_char.Humanoid.Health > 0 then
@@ -220,14 +220,11 @@ local function kill_everyone()
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "leftHand"}))
 						muscle_event:FireServer(unpack({ [1] = "punch", [2] = "rightHand"}))
-						head.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999))
-						head.Anchored = false
 					end
 				end
 			end
 		end
 	end
-
 
 end
 
@@ -272,7 +269,6 @@ MainTab:Show()
 library:FormatWindows()
 
 local heartbeat = nil
-
 local startTime = tick()
 
 heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
@@ -354,7 +350,6 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			startTime = tick()
 
 			if flags.kill_everyone then
-				print("aiming to kill")
 				kill_everyone()
 			end
 
