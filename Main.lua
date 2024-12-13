@@ -346,10 +346,8 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			if rock then rock.CFrame = CFrame.new(Vector3.new(9999, 9999, 9999)) end
 		end
 
-		if tick() - startTime >= 0.2 then
+		if tick() - startTime >= 0.1 then
 			startTime = tick()
-
-			local muscleEvent = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
 
 			if flags.kill_everyone then
 				kill_everyone()
