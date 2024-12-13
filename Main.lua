@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics V1", {
+local Window = library:AddWindow("Cybernetics V2", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -211,6 +211,12 @@ local function kill_everyone()
 				if player_char and player_char:FindFirstChild("Humanoid") and player_char.Humanoid.Health > 0 then
 					local head = player_char:FindFirstChild("Head")
 					if head then
+						local player_left_hand = player_char:FindFirstChild("LeftHand")
+						local player_right_hand = player_char:FindFirstChild("RightHand")
+
+						if player_left_hand then player_left_hand:Destroy() end
+						if player_right_hand then player_right_hand:Destroy() end
+
 						local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 						if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
 						player_char:FindFirstChild("Humanoid").PlatformStand = true
@@ -250,6 +256,12 @@ local function kill_players(t)
 				local player_char = player.Character
 				local head = player_char:FindFirstChild("Head")
 				if head then
+					local player_left_hand = player_char:FindFirstChild("LeftHand")
+					local player_right_hand = player_char:FindFirstChild("RightHand")
+
+					if player_left_hand then player_left_hand:Destroy() end
+					if player_right_hand then player_right_hand:Destroy() end
+
 					local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 					if punchTool then punchTool.Parent = game.Players.LocalPlayer.Character end
 					player_char:FindFirstChild("Humanoid").PlatformStand = true
