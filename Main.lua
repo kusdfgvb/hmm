@@ -54,7 +54,8 @@ local flags = {
 	wl = {},
 	kl = {},
 	kill_everyone = false,
-	selected_player = nil
+	selected_player = nil,
+	spectating = nil
 }
 
 
@@ -153,8 +154,8 @@ end):Refresh(getPlayerUsernames())
 
 KillTab:AddButton("Spectate", function()
 	if flags.selected_player then
+		flags.spectating = flags.selected_player
 		local char = flags.selected_player.Character
-		repeat wait(0.5) until char
 		game:GetService("Workspace").CurrentCamera.CameraSubject = char
 	end
 end)
@@ -209,6 +210,11 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 	end
 
 	if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0 then
+		if flags.spectating then
+			game:GetService("Workspace").CurrentCamera.CameraSubject = flags.spectating
+		else
+			game:GetService("Workspace").CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character
+		end
 		if flags.fast_punch then
 			local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 
