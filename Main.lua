@@ -139,13 +139,13 @@ end)
 local function getPlayerUsernames()
 	local t = {}
 	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-		table.insert(v.Name)
+		table.insert(t, v.Name)
 	end
 
 	return t
 end
 
-local PlayerDropdown = KillTab:AddDropdown("Select Gym", function(obj)
+local PlayerDropdown = KillTab:AddDropdown("Select Player", function(obj)
 	flags.selected_player = game:GetService("Players"):FindFirstChild(obj)
 end):Refresh(getPlayerUsernames())
 
@@ -298,3 +298,4 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 		end
 	end
 end)
+
