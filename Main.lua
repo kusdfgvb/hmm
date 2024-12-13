@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics", {
+local Window = library:AddWindow("Cybernetics V2", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -298,9 +298,11 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
             			local pChar = v.Character
             			if pChar then
                 			local head = pChar:FindFirstChild("Head")
+							head.Anchored = true
                 			if head then head.CFrame = lefthand.CFrame end
 			                muscleEvent:FireServer("punch", "leftHand")
     	    		        muscleEvent:FireServer("punch", "rightHand")
+							head.Anchored = false
 			            end
         			end
 	    		end
@@ -321,9 +323,11 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
                 			local pChar = player.Character
                 			if pChar then
                     			local head = pChar:FindFirstChild("Head")
+								head.Anchored = true
 	                    		if head then head.CFrame = lefthand.CFrame end
 			                    muscleEvent:FireServer("punch", "leftHand")
         			            muscleEvent:FireServer("punch", "rightHand")
+								head.Anchored = false
 		    	            end
 		        	    end
 			        end
