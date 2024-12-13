@@ -283,7 +283,6 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 
 			local muscleEvent = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
 
-		
 			if flags.kill_everyone then
 				local punchTool = game.Players.LocalPlayer.Backpack:FindFirstChild("Punch")
 				if not punchTool then
@@ -298,11 +297,14 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
             			local pChar = v.Character
             			if pChar then
                 			local head = pChar:FindFirstChild("Head")
-							head.Anchored = true
-                			if head then head.CFrame = lefthand.CFrame end
-			                muscleEvent:FireServer("punch", "leftHand")
-    	    		        muscleEvent:FireServer("punch", "rightHand")
-							head.Anchored = false
+                			if head then
+								head.Anchored = true
+								pChar.Humanoid.PlatformStand = true
+								head.CFrame = lefthand.CFrame
+								muscleEvent:FireServer("punch", "leftHand")
+    	    		        	muscleEvent:FireServer("punch", "rightHand")
+								head.Anchored = false
+							end
 			            end
         			end
 	    		end
@@ -322,13 +324,16 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
             			if player then
                 			local pChar = player.Character
                 			if pChar then
-                    			local head = pChar:FindFirstChild("Head")
-								head.Anchored = true
-	                    		if head then head.CFrame = lefthand.CFrame end
-			                    muscleEvent:FireServer("punch", "leftHand")
-        			            muscleEvent:FireServer("punch", "rightHand")
-								head.Anchored = false
-		    	            end
+								local head = pChar:FindFirstChild("Head")
+								if head then
+									head.Anchored = true
+									pChar.Humanoid.PlatformStand = true
+									head.CFrame = lefthand.CFrame
+									muscleEvent:FireServer("punch", "leftHand")
+									muscleEvent:FireServer("punch", "rightHand")
+									head.Anchored = false
+								end
+							end
 		        	    end
 			        end
 			    end
