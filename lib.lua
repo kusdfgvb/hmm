@@ -6,7 +6,7 @@ local ui_options = {
 }
 
 do
-	local imgui = game:GetService("CoreGui"):FindFirstChild("Nitrous")
+	local imgui = game:GetService("CoreGui"):FindFirstChild("imgui")
 	if imgui then
 		imgui:Destroy()
 		task.wait(1)
