@@ -139,7 +139,9 @@ end)
 local function getPlayerUsernames()
 	local t = {}
 	for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-		table.insert(t, v.Name)
+		if v ~= game.Players.LocalPlayer then
+			table.insert(t, v.Name)
+		end
 	end
 
 	return t
@@ -199,7 +201,6 @@ local startTime = tick()
 
 heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 	if not game:GetService("CoreGui"):FindFirstChild("imgui") then
-		print("noig")
 		if heartbeat then
 			heartbeat:Disconnect()
 			heartbeat = nil
@@ -277,9 +278,12 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			for _, v in pairs(game:GetService("Players"):GetPlayers()) do
 				if v ~= game.Players.LocalPlayer and not table.find(flags.wl, v.Name) then
 					local pChar = v.Character
-					if pChar then pChar.Head.CFrame = lefthand.CFrame end
-					muscleEvent:FireServer("punch", "leftHand")
-					muscleEvent:FireServer("punch", "rightHand")
+					if pChar then
+						local head = pChar:FindFirstChild("Head")
+						if head then head.CFrame = lefthand.CFrame end
+						muscleEvent:FireServer("punch", "leftHand")
+						muscleEvent:FireServer("punch", "rightHand")
+					end
 				end
 			end
 		end
@@ -287,10 +291,15 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 		if #flags.kl > 0 then
 			local lefthand = game.Players.LocalPlayer.Character.LeftHand
 			for _, v in pairs(flags.kl) do
-				if table.find(flags.wl, v) then
+				if table.find(flags.wl, v) == nil then
 					local player = game.Players:FindFirstChild(v)
 					local pChar = player and player.Character
-					if pChar then pChar.Head.CFrame = lefthand.CFrame end
+					if pChar then
+						local head = pChar:FindFirstChild("Head")
+						if head then head.CFrame = lefthand.CFrame end
+						muscleEvent:FireServer("punch", "leftHand")
+						muscleEvent:FireServer("punch", "rightHand")
+					end
 					muscleEvent:FireServer("punch", "leftHand")
 					muscleEvent:FireServer("punch", "rightHand")
 				end
