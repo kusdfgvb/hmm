@@ -58,6 +58,9 @@ local flags = {
 	spectating = nil
 }
 
+local joinEvent = nil
+local leaveEvent = nil
+
 
 MainTab:AddTextBox("Speed", function(text)
 	local v = tonumber(text)
@@ -279,37 +282,38 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 		startTime = tick()
 		local muscleEvent = game.Players.LocalPlayer:FindFirstChild("muscleEvent")
 
+		
 		if flags.kill_everyone then
-			local lefthand = game.Players.LocalPlayer.Character.LeftHand
-			for _, v in pairs(game:GetService("Players"):GetPlayers()) do
-				if v ~= game.Players.LocalPlayer and not table.find(flags.wl, v.Name) then
-					local pChar = v.Character
-					if pChar then
-						local head = pChar:FindFirstChild("Head")
-						if head then head.CFrame = lefthand.CFrame end
-						muscleEvent:FireServer("punch", "leftHand")
-						muscleEvent:FireServer("punch", "rightHand")
-					end
-				end
-			end
+    		local lefthand = game.Players.LocalPlayer.Character.LeftHand
+    		for _, v in pairs(game:GetService("Players"):GetPlayers()) do
+        		if v ~= game.Players.LocalPlayer and not table.find(flags.wl, v.Name) then
+            		local pChar = v.Character
+            		if pChar then
+                		local head = pChar:FindFirstChild("Head")
+                		if head then head.CFrame = lefthand.CFrame end
+		                muscleEvent:FireServer("punch", "leftHand")
+        		        muscleEvent:FireServer("punch", "rightHand")
+		            end
+        		end
+    		end
 		end
 
 		if #flags.kl > 0 then
-			local lefthand = game.Players.LocalPlayer.Character.LeftHand
-			for _, v in pairs(flags.kl) do
-				if table.find(flags.wl, v) == nil then
-					local player = game.Players:FindFirstChild(v)
-					local pChar = player and player.Character
-					if pChar then
-						local head = pChar:FindFirstChild("Head")
-						if head then head.CFrame = lefthand.CFrame end
-						muscleEvent:FireServer("punch", "leftHand")
-						muscleEvent:FireServer("punch", "rightHand")
-					end
-					muscleEvent:FireServer("punch", "leftHand")
-					muscleEvent:FireServer("punch", "rightHand")
-				end
-			end
+    		local lefthand = game.Players.LocalPlayer.Character.LeftHand
+   			for _, v in pairs(flags.kl) do
+        		if not table.find(flags.wl, v) then
+            		local player = game.Players:FindFirstChild(v)
+            		if player then
+                		local pChar = player.Character
+                		if pChar then
+                    		local head = pChar:FindFirstChild("Head")
+                    		if head then head.CFrame = lefthand.CFrame end
+		                    muscleEvent:FireServer("punch", "leftHand")
+        		            muscleEvent:FireServer("punch", "rightHand")
+		                end
+		            end
+		        end
+		    end
 		end
 	end
 end)
