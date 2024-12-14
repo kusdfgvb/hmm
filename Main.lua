@@ -37,7 +37,7 @@ end
 
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/kusdfgvb/hmm/refs/heads/main/lib.lua"))()
 
-local Window = library:AddWindow("Cybernetics V2", {
+local Window = library:AddWindow("Cybernetics V1", {
 	main_color = Color3.fromRGB(44, 24, 125),
 	min_size = Vector2.new(430, 320),
 	toggle_key = Enum.KeyCode.RightShift,
@@ -280,6 +280,15 @@ local function kill_players(t)
 	end
 end
 
+joinEvent = game:GetService("Players").PlayerAdded:Connect(function(P)
+	task.wait(0.1)
+	PlayerDropdown:Refresh(getPlayerUsernames())
+end)
+
+leaveEvent = game.Players.PlayerRemoving:Connect(function(player)
+	task.wait(0.1)
+	PlayerDropdown:Refresh(getPlayerUsernames())
+end)
 
 MainTab:Show()
 library:FormatWindows()
@@ -293,6 +302,17 @@ heartbeat = game:GetService("RunService").Heartbeat:Connect(function()
 			heartbeat:Disconnect()
 			heartbeat = nil
 		end
+
+		if joinEvent then
+			joinEvent:Disconnect()
+			joinEvent = nil
+		end
+
+		if leaveEvent then
+			leaveEvent:Disconnect()
+			leaveEvent = nil
+		end
+
 		return
 	end
 
