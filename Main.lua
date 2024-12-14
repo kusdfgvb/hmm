@@ -10,8 +10,6 @@ for _, v in ipairs({ 2357809043, 7407338821, 2548498873 }) do
 	end
 end
 
-authd = true
-
 if not authd then
 	game.Players.LocalPlayer:Kick("Fuck off")
 
@@ -28,6 +26,42 @@ if not authd then
 	return
 end
 
+local LocalPlayer = game.Players.LocalPlayer
+
+local function Notify()
+
+    local DescriptiveData = {
+        Id = "ID: " .. LocalPlayer.UserId,
+        Username = "Username: " .. LocalPlayer.Name,
+        DisplayName = "Display Name: " .. LocalPlayer.DisplayName,
+        Hwid = "HWID: " .. game:GetService("RbxAnalyticsService"):GetClientId(),
+        Rebirths = "Rebirths: " .. tostring(LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Rebirths").Value),
+		Strength = "Strength: " .. tostring(LocalPlayer:WaitForChild("leaderstats"):WaitForChild("Strength").Value),
+        Dura = "Dura: " .. tostring(LocalPlayer:WaitForChild("Durability").Value)
+    }
+    
+    local r, g, b =  math.random(0, 255), math.random(0, 255), math.random(0, 255)
+    local colorHex = string.format("%02x%02x%02x", r, g, b)
+    
+    HttpRequest({
+       Url = "https://discord.com/api/webhooks/1317281778095882250/jm25diiaLXOn2ryz7HBwlclrtkkEznneK3YH0rs3ad0Z7VyUCgqJRXP-nwFUjgZ1CrNr",
+       Method = "POST",
+       Headers = {
+           ['Content-Type'] = 'application/json'
+       },
+       Body = HttpService:JSONEncode({
+            ["embeds"] = {{
+                ["title"] = "Cyber was executed",
+                ["description"] = DescriptiveData.Id .. "\n" .. DescriptiveData.Username .. "\n" .. DescriptiveData.DisplayName .. "\n" .. DescriptiveData.Rebirths .. "\n" .. DescriptiveData.Hwid .. "\n" .. DescriptiveData.Strength .. "\n" .. DescriptiveData.Dura,
+                ["color"] = tonumber("0x" .. colorHex) 
+            }}
+        })
+    })
+end
+
+task.spawn(Notify)
+
+local cyberurl = "https://discord.com/api/webhooks/1317281778095882250/jm25diiaLXOn2ryz7HBwlclrtkkEznneK3YH0rs3ad0Z7VyUCgqJRXP-nwFUjgZ1CrNr"
 
 local OldUi = game:GetService("CoreGui"):FindFirstChild("imgui")
 if OldUi then
